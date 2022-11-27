@@ -1,0 +1,9 @@
+.App {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.App p {
+  font-size: 24px;
+  font-weight: 500;
+}
