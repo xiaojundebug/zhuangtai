@@ -6,13 +6,16 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/rsmwr.umd.cjs",
-  "module": "./dist/rsmwr.es.js",
   "types": "./dist/index.d.ts",
+  "module": "./dist/rsmwr.js",
   "exports": {
     ".": {
-      "import": "./dist/rsmwr.es.js",
-      "require": "./dist/rsmwr.umd.cjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/rsmwr.js"
+    },
+    "./plugins": {
+      "types": "./dist/plugins.d.ts",
+      "import": "./dist/plugins.js"
     }
   },
   "scripts": {
@@ -33,9 +36,9 @@
     "prettier": "^2.7.1",
     "react": "^16.8",
     "rxjs": "^7.0",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.8",
-    "vite-plugin-dts": "^1.6.6"
+    "typescript": "^5.0.4",
+    "vite": "^4.3.8",
+    "vite-plugin-dts": "^2.3.0"
   },
   "peerDependencies": {
     "immer": ">=9.0",

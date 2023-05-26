@@ -20,6 +20,6 @@ export function shallowEqual<T>(objA: T, objB: T) {
   return true
 }
 
-export function returnFalse() {
-  return false
-}
+export const returnFalse = () => false
+
+export const echo = (value: any) => value

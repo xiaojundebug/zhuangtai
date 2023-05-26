@@ -1,4 +1,3 @@
-import Model from './Model'
-import useModel from './hooks/useModel'
-
-export { Model, useModel }
+export * from './Model'
+export { default as Model } from './Model'
+export { default as useModel } from './hooks/useModel'

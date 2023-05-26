@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import Model, { Comparer, Selector, State } from '../Model'
-import { returnFalse, shallowEqual } from '../utils'
+import { echo, returnFalse, shallowEqual } from '../utils'
 
 type ModelWithReact<S extends State> = Model<S> & {
   getServerState?: () => S
@@ -30,7 +30,7 @@ function useModel<T extends State, U extends keyof T | any = T>(
           }
           return value
         }
-    : s => s // pick all
+    : echo // pick all
   const equalityFn = isPickAll ? returnFalse : comparer || shallowEqual
   const api = useMemo(() => {
     return {

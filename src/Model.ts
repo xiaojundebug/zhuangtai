@@ -1,26 +1,39 @@
 import type { Observable } from 'rxjs'
 import { BehaviorSubject } from 'rxjs'
 import { map, distinctUntilChanged } from 'rxjs/operators'
-import produce from 'immer'
-
-const assign = produce((draft, part) => {
-  Object.assign(draft || {}, part)
-})
+import { echo } from './utils'
 
 export type State = Record<string, any>
+export type ExtractState<T extends Model> = T extends { getState: () => infer S } ? S : never
 export type Selector<S extends State, V> = (state: S) => V
 export type Comparer<V> = (previous: V, current: V) => boolean
+export type Plugin<T extends Model = any> = (model: T) => {
+  onInit?: (initialState?: ExtractState<T>) => T
+  afterChange?: (state: ExtractState<T>) => void
+}
+
+let DEFAULT_PLUGINS: Plugin[] = []
 
 class Model<S extends State = any> {
   readonly state$ = new BehaviorSubject({} as S)
+  private readonly plugins: ReturnType<Plugin>[] = []
 
   get state() {
     return this.getState()
   }
 
-  constructor(state?: S) {
-    if (state) {
-      this.setState(state)
+  constructor(initialState?: S, options?: { plugins?: Plugin[] }) {
+    const { plugins = [] } = options || {}
+
+    this.plugins = DEFAULT_PLUGINS.concat(plugins).map(plugin => plugin(this))
+
+    const finalInitialState = this.plugins.reduce((result, plugin) => {
+      const { onInit = echo } = plugin
+      return onInit(result)
+    }, initialState)
+
+    if (finalInitialState) {
+      this.setState(finalInitialState)
     }
   }
 
@@ -28,27 +41,30 @@ class Model<S extends State = any> {
     return this.state$.pipe(map(selector), distinctUntilChanged(comparer))
   }
 
-  setState(state: Partial<S>, replace?: boolean): void
-  setState(state: (draft: S) => void): void
-  setState(state: Partial<S> | ((draft: S) => void), replace = false) {
+  setState(state: Partial<S>, replace = false) {
     const original = this.getState()
 
     if (original === state) {
       return
     }
 
-    // prettier-ignore
-    const nextState =
-      typeof state === 'function'
-        ? produce(original, state)
-        : assign(replace ? {} : original, state)
+    const nextState = (replace ? state : { ...original, ...state }) as S
 
     this.state$.next(nextState)
+
+    for (const plugin of this.plugins) {
+      const { afterChange } = plugin
+      afterChange?.(nextState)
+    }
   }
 
   getState(): S {
     return this.state$.value
   }
+}
+
+export function setDefaultPlugins(plugins: Plugin[]) {
+  DEFAULT_PLUGINS = plugins
 }
 
 export default Model

@@ -6,10 +6,11 @@ import dts from 'vite-plugin-dts'
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: pkg.name,
-      formats: ['es', 'umd'],
-      fileName: (format) => `${pkg.name}.${format}.js`,
+      entry: {
+        [pkg.name]: resolve(__dirname, 'src/index.ts'),
+        [`plugins`]: resolve(__dirname, 'src/plugins.ts')
+      },
+      formats: ['es'],
     },
     rollupOptions: {
       external: ['react', 'rxjs', 'rxjs/operators', 'immer'],
