@@ -1,5 +1,5 @@
 <p align="center">
-    <img style="margin: 50px 0" alt="logo" src="./logo.png" width="80">
+    <img alt="logo" src="./jellyfish.png">
 </p>
 
 # rsmwr
