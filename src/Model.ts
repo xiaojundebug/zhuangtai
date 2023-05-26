@@ -61,10 +61,10 @@ class Model<S extends State = any> {
   getState(): S {
     return this.state$.value
   }
-}
 
-export function setDefaultPlugins(plugins: Plugin[]) {
-  DEFAULT_PLUGINS = plugins
+  static setDefaultPlugins(plugins: Plugin[]) {
+    DEFAULT_PLUGINS = plugins
+  }
 }
 
 export default Model

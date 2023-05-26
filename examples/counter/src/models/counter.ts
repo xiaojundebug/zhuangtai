@@ -1,9 +1,9 @@
-import { Model, State, setDefaultPlugins } from 'rsmwr'
+import { Model, State } from 'rsmwr'
 import { immer, persist } from 'rsmwr/plugins'
 import { sleep } from '../utils'
 
 // 设置全局默认插件，对所有 Model 生效
-setDefaultPlugins([immer()])
+Model.setDefaultPlugins([immer()])
 
 // 由于 immer 插件修改了 setState 的传参方式，我们需要扩展一下类型声明
 declare module 'rsmwr' {
