@@ -302,7 +302,3 @@ const { foo, bar } = useStore(store, ['foo', 'bar'], deepEqual)
 ## 常见问题
 
 ...
-
-## 其它
-
-Logo 来自 https://www.flaticon.com/authors/freepik
