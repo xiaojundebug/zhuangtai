@@ -195,31 +195,31 @@ class Counter extends Model<{ count: number }> {
 
 #### Options
 
-##### `name`
+##### `name`（必选）
 
 > Type: `string`
 
 存到 storage 中的唯一的 key 值
 
-##### `reducer`
+##### `reducer`（可选）
 
 > Type: `(state: S) => Partial<S>`
 
-只保存需要的字段
+只保存需要的字段，默认保存所有
 
-##### `getStorage`
+##### `getStorage`（可选）
 
 > Type: `() => StateStorage`
 
 自定义 storage，默认使用 localStorage
 
-##### `serializer`
+##### `serializer`（可选）
 
 > Type: `Serizlizer`
 
 自定义序列化器，默认是 `JSON.stringify`
 
-##### `deserializer`
+##### `deserializer`（可选）
 
 > Type: `Deserializer`
 
