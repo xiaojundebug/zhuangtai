@@ -1,13 +1,13 @@
-import { Model, State } from 'rsmwr'
+import { Store, State } from 'rsmwr'
 import { immer, persist } from 'rsmwr/plugins'
 import { sleep } from '../utils'
 
-// 设置全局默认插件，对所有 Model 生效
-Model.setDefaultPlugins([immer()])
+// 设置全局默认插件，对所有 Store 生效
+Store.setDefaultPlugins([immer()])
 
 // 由于 immer 插件修改了 setState 的传参方式，我们需要扩展一下类型声明
 declare module 'rsmwr' {
-  export interface Model<S extends State = any> {
+  interface Store<S extends State = any> {
     setState(state: Partial<S>, replace?: boolean): void
     setState(state: (draft: S) => void): void
   }
@@ -31,7 +31,7 @@ export interface CounterState {
   bar: string
 }
 
-class Counter extends Model<CounterState> {
+class Counter extends Store<CounterState> {
   constructor() {
     // initial state
     super({ count: 0, foo: 'foo', bar: 'bar' }, { plugins: [persistator] })

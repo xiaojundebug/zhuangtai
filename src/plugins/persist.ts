@@ -1,5 +1,5 @@
-import Model, { ExtractState } from '../Model'
-import { Plugin } from '../Model'
+import Store, { ExtractState } from '../Store'
+import { Plugin } from '../Store'
 import { echo } from '../utils'
 
 export interface StateStorage {
@@ -9,7 +9,7 @@ export interface StateStorage {
 }
 export type Serizlizer = (value: any, ...rest: any[]) => string
 export type Deserializer = (text: string, ...rest: any[]) => any
-export interface PersistOptions<T extends Model> {
+export interface PersistOptions<T extends Store> {
   /**
    * 存到 storage 中的唯一的 key 值
    */
@@ -39,7 +39,7 @@ function resolveStorage(storage?: StateStorage) {
 /**
  * state persist plugin
  */
-function persist<T extends Model>(options: PersistOptions<T>) {
+function persist<T extends Store>(options: PersistOptions<T>) {
   const { name, partialize = echo, serialize = JSON.stringify, deserialize = JSON.parse } = options
 
   return (_ => ({

@@ -1,5 +1,5 @@
-import Model from '../Model'
-import { Plugin } from '../Model'
+import Store from '../Store'
+import { Plugin } from '../Store'
 import produce from 'immer'
 
 const assign = produce((draft, part) => {
@@ -9,11 +9,11 @@ const assign = produce((draft, part) => {
 /**
  * immer plugin
  */
-function immer<T extends Model>() {
-  return (model => {
-    const setFn = model.setState.bind(model)
+function immer<T extends Store>() {
+  return (store => {
+    const setFn = store.setState.bind(store)
 
-    model.setState = function setState(state: Partial<T> | ((draft: T) => void), replace = false) {
+    store.setState = function setState(state: Partial<T> | ((draft: T) => void), replace = false) {
       const original = this.getState()
 
       if (original === state) {

@@ -4,17 +4,17 @@ import { map, distinctUntilChanged } from 'rxjs/operators'
 import { echo } from './utils'
 
 export type State = Record<string, any>
-export type ExtractState<T extends Model> = T extends { getState: () => infer S } ? S : never
+export type ExtractState<T extends Store> = T extends { getState: () => infer S } ? S : never
 export type Selector<S extends State, V> = (state: S) => V
 export type Comparer<V> = (previous: V, current: V) => boolean
-export type Plugin<T extends Model = any> = (model: T) => {
+export type Plugin<T extends Store = any> = (store: T) => {
   onInit?: (initialState?: ExtractState<T>) => T
   afterChange?: (state: ExtractState<T>) => void
 }
 
 let DEFAULT_PLUGINS: Plugin[] = []
 
-class Model<S extends State = any> {
+class Store<S extends State = any> {
   readonly state$ = new BehaviorSubject({} as S)
   private readonly plugins: ReturnType<Plugin>[] = []
 
@@ -67,4 +67,4 @@ class Model<S extends State = any> {
   }
 }
 
-export default Model
+export default Store

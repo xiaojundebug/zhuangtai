@@ -1,18 +1,18 @@
 import { useMemo } from 'react'
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
-import Model, { Comparer, Selector, State } from '../Model'
+import Store, { Comparer, Selector, State } from '../Store'
 import { echo, returnFalse, shallowEqual } from '../utils'
 
-type ModelWithReact<S extends State> = Model<S> & {
+type StoreWithReact<S extends State> = Store<S> & {
   getServerState?: () => S
 }
 type ValueType<T extends State, U extends keyof T | any> = U extends keyof T ? Pick<T, U> : U
 
-function useModel<S extends State>(model: ModelWithReact<S>): S
-function useModel<S extends State, V>(model: ModelWithReact<S>, selector: Selector<S, V>, comparer?: Comparer<V>): V
-function useModel<S extends State, K extends keyof S>(model: ModelWithReact<S>, keys: K[], comparer?: Comparer<Pick<S, K>>): Pick<S, K>
-function useModel<T extends State, U extends keyof T | any = T>(
-  model: ModelWithReact<T>,
+function useStore<S extends State>(store: StoreWithReact<S>): S
+function useStore<S extends State, V>(store: StoreWithReact<S>, selector: Selector<S, V>, comparer?: Comparer<V>): V
+function useStore<S extends State, K extends keyof S>(store: StoreWithReact<S>, keys: K[], comparer?: Comparer<Pick<S, K>>): Pick<S, K>
+function useStore<T extends State, U extends keyof T | any = T>(
+  store: StoreWithReact<T>,
   keysOrSelector?: U extends keyof T ? U[] : Selector<T, U>,
   comparer?: Comparer<ValueType<T, U>>,
 ): ValueType<T, U> {
@@ -35,13 +35,13 @@ function useModel<T extends State, U extends keyof T | any = T>(
   const api = useMemo(() => {
     return {
       subscribe: (cb: () => void) => {
-        const sub = model.state$.subscribe(cb)
+        const sub = store.state$.subscribe(cb)
         return () => sub.unsubscribe()
       },
-      getState: model.getState.bind(model),
-      getServerState: (model.getServerState || model.getState).bind(model),
+      getState: store.getState.bind(store),
+      getServerState: (store.getServerState || store.getState).bind(store),
     }
-  }, [model])
+  }, [store])
 
   return useSyncExternalStoreWithSelector(
     api.subscribe,
@@ -52,4 +52,4 @@ function useModel<T extends State, U extends keyof T | any = T>(
   )
 }
 
-export default useModel
+export default useStore

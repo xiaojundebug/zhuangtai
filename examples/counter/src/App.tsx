@@ -1,11 +1,11 @@
 import './App.css'
-import { useModel } from 'rsmwr/react'
-import { counter } from './models/counter'
+import { useStore } from 'rsmwr/react'
+import { counter } from './stores/counter'
 
 function App() {
-  const { count } = useModel(counter, s => ({ count: s.count }))
+  const { count } = useStore(counter, s => ({ count: s.count }))
   // or
-  // useModel(counter, ['count'])
+  // useStore(counter, ['count'])
 
   return (
     <div className="App">

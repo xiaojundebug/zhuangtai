@@ -1,2 +1,2 @@
-export * from './Model'
-export { default as Model } from './Model'
+export * from './Store'
+export { default as Store } from './Store'

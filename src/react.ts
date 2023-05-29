@@ -1,3 +1,3 @@
-export * from './hooks/useModel'
+export * from './hooks/useStore'
 
-export { default as useModel } from './hooks/useModel'
+export { default as useStore } from './hooks/useStore'
