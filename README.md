@@ -42,6 +42,8 @@ class Counter extends Model<CounterState> {
 export const counter = new Counter()
 
 // App.tsx
+import { useModel } from 'rsmwr/react'
+
 function App() {
   // 不用担心其他 state 变动会触发多余渲染，内部已经处理
   const count = useModel(counter, s => s.count)
@@ -234,6 +236,10 @@ Model 只是一个普通 class，要想它在 react 中使用，必须用一种�
 ### `useModel`
 
 react 自定义 hook，用于将 Model 中的 state 绑定到 react 组件
+
+```tsx
+import { useModel } from 'rsmwr/react'
+```
 
 它支持多种传参方式
 

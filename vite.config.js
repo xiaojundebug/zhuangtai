@@ -8,7 +8,8 @@ export default defineConfig({
     lib: {
       entry: {
         [pkg.name]: resolve(__dirname, 'src/index.ts'),
-        [`plugins`]: resolve(__dirname, 'src/plugins.ts')
+        [`plugins`]: resolve(__dirname, 'src/plugins.ts'),
+        [`react`]: resolve(__dirname, 'src/react.ts')
       },
       formats: ['es'],
     },

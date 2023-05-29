@@ -16,6 +16,10 @@
     "./plugins": {
       "types": "./dist/plugins.d.ts",
       "import": "./dist/plugins.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js"
     }
   },
   "scripts": {

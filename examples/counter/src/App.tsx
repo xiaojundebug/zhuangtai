@@ -1,5 +1,5 @@
 import './App.css'
-import { useModel } from 'rsmwr'
+import { useModel } from 'rsmwr/react'
 import { counter } from './models/counter'
 
 function App() {
