@@ -1,5 +1,4 @@
-import Store, { ExtractState } from '../Store'
-import { Plugin } from '../Store'
+import Store, { ExtractState, Plugin } from '../Store'
 import { echo } from '../utils'
 
 export interface StateStorage {

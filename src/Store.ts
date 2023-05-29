@@ -37,7 +37,7 @@ class Store<S extends State = any> {
     }
   }
 
-  public select<V>(selector: Selector<S, V>, comparer?: Comparer<V>): Observable<V> {
+  select<V>(selector: Selector<S, V>, comparer?: Comparer<V>): Observable<V> {
     return this.state$.pipe(map(selector), distinctUntilChanged(comparer))
   }
 
@@ -60,6 +60,10 @@ class Store<S extends State = any> {
 
   getState(): S {
     return this.state$.value
+  }
+
+  destroy() {
+    this.state$.complete()
   }
 
   static setDefaultPlugins(plugins: Plugin[]) {

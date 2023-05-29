@@ -195,6 +195,34 @@ class Counter extends Store<{ count: number }> {
 }
 ```
 
+### 自定义插件
+
+你也可以根据业务需求开发自己的插件，让我们以 log 插件为例
+
+```ts
+import { Store, Plugin } from 'rsmwr'
+import { pairwise } from 'rxjs/operators'
+
+function createLogPlugin<T extends Store>() {
+  return (store => {
+    store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
+      console.info(`${store.constructor.name}:
+prev state: %o
+next state: %o
+      `, prev, next)
+    })
+    return {}
+  }) as Plugin<T>
+}
+
+class Counter extends Store<{ count: number }> {
+  constructor() {
+    super({ count: 0 }, { plugins: [createLogPlugin()] })
+  }
+  // ...
+}
+```
+
 #### Options
 
 ##### `name`（必选）

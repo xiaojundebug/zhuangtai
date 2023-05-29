@@ -1,6 +1,7 @@
-import { Store, State } from 'rsmwr'
+import { Store, State, Plugin } from 'rsmwr'
 import { immer, persist } from 'rsmwr/plugins'
 import { sleep } from '../utils'
+import { pairwise } from 'rxjs/operators'
 
 // 设置全局默认插件，对所有 Store 生效
 Store.setDefaultPlugins([immer()])
@@ -14,7 +15,7 @@ declare module 'rsmwr' {
 }
 
 // 持久化插件
-const persistator = persist<Counter>({
+const persistPlugin = persist<Counter>({
   name: 'COUNTER_STATE',
   partialize: state => ({ count: state.count }),
   // 默认是 localStorage
@@ -25,6 +26,18 @@ const persistator = persist<Counter>({
   deserialize: JSON.parse,
 })
 
+// 自定义插件
+function createLogPlugin<T extends Store>() {
+  return (store => {
+    store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
+      console.info(`${store.constructor.name}:
+%cprev state: %o
+%cnext state: %o
+      `, 'color: #999', prev, 'color: #22c55e', next)
+    })
+    return {}
+  }) as Plugin<T>
+}
 export interface CounterState {
   count: number
   foo: string
@@ -34,7 +47,7 @@ export interface CounterState {
 class Counter extends Store<CounterState> {
   constructor() {
     // initial state
-    super({ count: 0, foo: 'foo', bar: 'bar' }, { plugins: [persistator] })
+    super({ count: 0, foo: 'foo', bar: 'bar' }, { plugins: [persistPlugin, createLogPlugin()] })
   }
 
   increase() {

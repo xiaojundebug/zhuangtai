@@ -1,5 +1,4 @@
-import Store from '../Store'
-import { Plugin } from '../Store'
+import Store, { Plugin } from '../Store'
 import produce from 'immer'
 
 const assign = produce((draft, part) => {
