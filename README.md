@@ -156,7 +156,7 @@ declare module 'rsmwr' {
   }
 }
 
-class Counter extends Model<{ count: 0 }> {
+class Counter extends Model<{ count: number }> {
   constructor() {
     super({ count: 0 }, { plugins: [immer()] })
   }
@@ -174,7 +174,7 @@ const persistator = persist<Counter>({
   name: 'COUNTER_STATE',
 })
 
-class Counter extends Model<{ count: 0 }> {
+class Counter extends Model<{ count: number }> {
   constructor() {
     super({ count: 0 }, { plugins: [persistator] })
   }
