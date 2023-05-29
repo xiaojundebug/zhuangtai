@@ -16,13 +16,13 @@ declare module 'rsmwr' {
 // 持久化插件
 const persistator = persist<Counter>({
   name: 'COUNTER_STATE',
-  reducer: state => ({ count: state.count }),
+  partialize: state => ({ count: state.count }),
   // 默认是 localStorage
   getStorage: () => sessionStorage,
   // 你可以使用该字段自定义序列化器
-  serializer: JSON.stringify,
+  serialize: JSON.stringify,
   // 你可以使用该字段自定义反序列化器
-  deserializer: JSON.parse,
+  deserialize: JSON.parse,
 })
 
 export interface CounterState {

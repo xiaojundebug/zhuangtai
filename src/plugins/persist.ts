@@ -7,8 +7,8 @@ export interface StateStorage {
   setItem: (name: string, value: string) => void
   removeItem: (name: string) => void
 }
-export type Serizlizer = typeof JSON.stringify
-export type Deserializer = typeof JSON.parse
+export type Serizlizer = (value: any, ...rest: any[]) => string
+export type Deserializer = (text: string, ...rest: any[]) => any
 export interface PersistOptions<T extends Model> {
   /**
    * 存到 storage 中的唯一的 key 值
@@ -17,7 +17,7 @@ export interface PersistOptions<T extends Model> {
   /**
    * 只保存需要的字段
    */
-  reducer?: (state: ExtractState<T>) => Partial<ExtractState<T>>
+  partialize?: (state: ExtractState<T>) => Partial<ExtractState<T>>
   /**
    * 自定义 storage，默认使用 localStorage
    */
@@ -25,11 +25,11 @@ export interface PersistOptions<T extends Model> {
   /**
    * 自定义序列化器
    */
-  serializer?: Serizlizer
+  serialize?: Serizlizer
   /**
    * 自定义反序列化器
    */
-  deserializer?: Deserializer
+  deserialize?: Deserializer
 }
 
 function resolveStorage(storage?: StateStorage) {
@@ -40,22 +40,17 @@ function resolveStorage(storage?: StateStorage) {
  * state persist plugin
  */
 function persist<T extends Model>(options: PersistOptions<T>) {
-  const {
-    name,
-    reducer = echo,
-    serializer = JSON.stringify,
-    deserializer = JSON.parse,
-  } = options
+  const { name, partialize = echo, serialize = JSON.stringify, deserialize = JSON.parse } = options
 
   return (_ => ({
     onInit(initialState) {
       const storage = resolveStorage(options.getStorage?.())
-      const persistedState = deserializer(storage.getItem(name) || '{}')
+      const persistedState = deserialize(storage.getItem(name) || '{}')
       return { ...initialState, ...persistedState }
     },
     afterChange(state) {
       const storage = resolveStorage(options.getStorage?.())
-      storage.setItem(name, serializer(reducer(state)))
+      storage.setItem(name, serialize(partialize(state)))
     },
   })) as Plugin<T>
 }
