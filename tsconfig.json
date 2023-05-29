@@ -20,8 +20,8 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "rsmwr": ["./src/index.ts"],
-      "rsmwr/*": ["./src/*.ts"]
+      "zhuangtai": ["./src/index.ts"],
+      "zhuangtai/*": ["./src/*.ts"]
     }
   },
   "include": ["src"]

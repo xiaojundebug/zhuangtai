@@ -1,5 +1,5 @@
 import './App.css'
-import { useStore } from 'rsmwr/react'
+import { useStore } from 'zhuangtai/react'
 import { counter } from './stores/counter'
 
 function App() {

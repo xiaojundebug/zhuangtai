@@ -1,5 +1,5 @@
-import { Store, State, Plugin } from 'rsmwr'
-import { immer, persist } from 'rsmwr/plugins'
+import { Store, State, Plugin } from 'zhuangtai'
+import { immer, persist } from 'zhuangtai/plugins'
 import { sleep } from '../utils'
 import { pairwise } from 'rxjs/operators'
 
@@ -7,7 +7,7 @@ import { pairwise } from 'rxjs/operators'
 Store.setDefaultPlugins([immer()])
 
 // 由于 immer 插件修改了 setState 的传参方式，我们需要扩展一下类型声明
-declare module 'rsmwr' {
+declare module 'zhuangtai' {
   interface Store<S extends State = any> {
     setState(state: Partial<S>, replace?: boolean): void
     setState(state: (draft: S) => void): void

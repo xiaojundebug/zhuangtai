@@ -1,8 +1,4 @@
-<p align="center">
-    <img alt="logo" src="./jellyfish.png">
-</p>
-
-# rsmwr
+# zhuangtai
 
 一个用 rxjs 实现的 react 状态管理工具
 
@@ -18,7 +14,7 @@
 
 ```tsx
 // CounterStore.ts
-import { Store } from 'rsmwr'
+import { Store } from 'zhuangtai'
 
 export interface CounterState {
   count: number
@@ -42,7 +38,7 @@ class Counter extends Store<CounterState> {
 export const counter = new Counter()
 
 // App.tsx
-import { useStore } from 'rsmwr/react'
+import { useStore } from 'zhuangtai/react'
 
 function App() {
   // 不用担心其他 state 变动会触发多余渲染，内部已经处理
@@ -67,7 +63,7 @@ Store 作为一个 class，其作用是管理数据的存放，处理数据的�
 ### 简单示例
 
 ```ts
-import { Store } from 'rsmwr'
+import { Store } from 'zhuangtai'
 
 export interface CounterState {
   count: number
@@ -147,11 +143,11 @@ count$.subject(val => {
 ### Immer Plugin
 
 ```ts
-import { Store, State } from 'rsmwr'
-import { immer } from 'rsmwr/plugins'
+import { Store, State } from 'zhuangtai'
+import { immer } from 'zhuangtai/plugins'
 
 // 由于 immer 插件修改了 setState 的传参方式，如果你是 typescript 用户，需要扩展一下类型声明
-declare module 'rsmwr' {
+declare module 'zhuangtai' {
   interface Store<S extends State = any> {
     setState(state: Partial<S>, replace?: boolean): void
     setState(state: (draft: S) => void): void
@@ -169,8 +165,8 @@ class Counter extends Store<{ count: number }> {
 ### Persist Plugin
 
 ```ts
-import { Store, State } from 'rsmwr'
-import { persist } from 'rsmwr/plugins'
+import { Store, State } from 'zhuangtai'
+import { persist } from 'zhuangtai/plugins'
 
 const persistator = persist<Counter>({
   name: 'COUNTER_STATE',
@@ -200,7 +196,7 @@ class Counter extends Store<{ count: number }> {
 你也可以根据业务需求开发自己的插件，让我们以 log 插件为例
 
 ```ts
-import { Store, Plugin } from 'rsmwr'
+import { Store, Plugin } from 'zhuangtai'
 import { pairwise } from 'rxjs/operators'
 
 function createLogPlugin<T extends Store>() {
@@ -266,7 +262,7 @@ Store 只是一个普通 class，要想它在 react 中使用，必须用一种�
 react 自定义 hook，用于将 Store 中的 state 绑定到 react 组件
 
 ```tsx
-import { useStore } from 'rsmwr/react'
+import { useStore } from 'zhuangtai/react'
 ```
 
 它支持多种传参方式

@@ -1,5 +1,5 @@
 {
-  "name": "rsmwr",
+  "name": "zhuangtai",
   "version": "0.0.1",
   "description": "A react state manager with rxjs.",
   "type": "module",
@@ -7,11 +7,11 @@
     "dist"
   ],
   "types": "./dist/index.d.ts",
-  "module": "./dist/rsmwr.js",
+  "module": "./dist/zhuangtai.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/rsmwr.js"
+      "import": "./dist/zhuangtai.js"
     },
     "./plugins": {
       "types": "./dist/plugins.d.ts",
