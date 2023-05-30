@@ -2,6 +2,12 @@
 
 一个用 rxjs 实现的 react 状态管理工具
 
+
+<p>
+    <img alt="stars" src="https://img.shields.io/github/stars/imzxj/zhuangtai.svg?color=%2336be52">&nbsp;
+    <img alt="contributors" src="https://img.shields.io/github/contributors/imzxj/zhuangtai.svg?color=%23409eff">
+</p>
+
 ## 特点
 
 - 简单易用，TypeScript 类型声明完善，没有啰嗦的样板代码
@@ -202,10 +208,14 @@ import { pairwise } from 'rxjs/operators'
 function createLogPlugin<T extends Store>() {
   return (store => {
     store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
-      console.info(`${store.constructor.name}:
+      console.info(
+        `${store.constructor.name}:
 prev state: %o
 next state: %o
-      `, prev, next)
+      `,
+        prev,
+        next,
+      )
     })
     return {}
   }) as Plugin<T>
@@ -301,4 +311,36 @@ const { foo, bar } = useStore(store, ['foo', 'bar'], deepEqual)
 
 ## 常见问题
 
-...
+<details>
+<summary>怎样在本地运行此项目？</summary>
+
+此项目没有使用 monorepo 进行管理，你可以通过 `npm link` 方式进行本地开发 & 预览
+
+1. 进入项目根目录，执行 `npm link`，代码修改后运行 `npm run build`
+2. 进入 `examples/counter` 文件夹，执行 `npm link zhuangtai`
+
+</details>
+
+<details>
+<summary>怎样在 SSR 框架中使用？</summary>
+
+正常来说 `zhuangtai` 可以在 SSR 框架中使用，但是 `persist` 插件会有些问题，因为 `persist` 插件会在服务端渲染期间访问浏览器 storage，这将导致服务端渲染失败，你需要自定义 `getStorage` 字段来修复此问题，参考以下代码
+
+```ts
+const dummyStorage = {
+  getItem: (name: string) => null,
+  setItem:  (name: string, value: string) => {},
+  removeItem: (name: string) => {},
+}
+const isBrowser = typeof window !== 'undefined'
+const myStorage = isBrowser ? localStorage: dummyStorage
+
+const persistPlugin = persist<Counter>({
+  // ...
+  getStorage: () => myStorage,
+})
+```
+
+除此之外还有一些其它问题，服务端和客户端渲染时由于状态不一致可能会导致“水合错误”（客户端拿到的是持久化后的状态，但服务端渲染时拿不到），在 `nextjs` 中我们可以通过[动态组件](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading)的方式解决此问题
+
+</details>
