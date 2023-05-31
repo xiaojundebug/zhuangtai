@@ -2,10 +2,9 @@
 
 一个用 rxjs 实现的 react 状态管理工具
 
-
 <p>
-    <img alt="stars" src="https://img.shields.io/github/stars/imzxj/zhuangtai.svg?color=%2336be52">&nbsp;
-    <img alt="contributors" src="https://img.shields.io/github/contributors/imzxj/zhuangtai.svg?color=%23409eff">
+  <img alt="stars" src="https://img.shields.io/github/stars/imzxj/zhuangtai.svg?color=%2336be52">&nbsp;
+  <img alt="contributors" src="https://img.shields.io/github/contributors/imzxj/zhuangtai.svg?color=%23409eff">
 </p>
 
 ## 特点
@@ -164,7 +163,18 @@ class Counter extends Store<{ count: number }> {
   constructor() {
     super({ count: 0 }, { plugins: [immer()] })
   }
-  // ...
+
+  increase() {
+    // immer 写法
+    this.setState(s => {
+      s.count++
+    })
+  }
+
+  decrease() {
+    // 普通写法
+    this.setState({ count: this.state.count - 1 })
+  }
 }
 ```
 
@@ -182,18 +192,7 @@ class Counter extends Store<{ count: number }> {
   constructor() {
     super({ count: 0 }, { plugins: [persistator] })
   }
-
-  increase() {
-    this.setState(s => {
-      s.count++
-    })
-  }
-
-  decrease() {
-    this.setState(s => {
-      s.count--
-    })
-  }
+  // ...
 }
 ```
 
@@ -329,11 +328,11 @@ const { foo, bar } = useStore(store, ['foo', 'bar'], deepEqual)
 ```ts
 const dummyStorage = {
   getItem: (name: string) => null,
-  setItem:  (name: string, value: string) => {},
+  setItem: (name: string, value: string) => {},
   removeItem: (name: string) => {},
 }
 const isBrowser = typeof window !== 'undefined'
-const myStorage = isBrowser ? localStorage: dummyStorage
+const myStorage = isBrowser ? localStorage : dummyStorage
 
 const persistPlugin = persist<Counter>({
   // ...
