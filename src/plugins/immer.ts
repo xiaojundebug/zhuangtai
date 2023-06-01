@@ -1,8 +1,8 @@
 import Store, { Plugin } from '../Store'
 import produce from 'immer'
 
-const assign = produce((draft, part) => {
-  Object.assign(draft || {}, part)
+const mergeState = produce((draft, ...rest) => {
+  Object.assign(draft || {}, ...rest)
 })
 
 /**
@@ -12,17 +12,20 @@ function immer<T extends Store>() {
   return (store => {
     const setFn = store.setState.bind(store)
 
-    store.setState = function setState(state: Partial<T> | ((draft: T) => void), replace = false) {
+    store.setState = function setState(
+      stateOrRecipe: Partial<T> | ((draft: T) => void),
+      replace = false,
+    ) {
       const original = this.getState()
 
-      if (original === state) {
+      if (original === stateOrRecipe) {
         return
       }
 
       const nextState =
-        typeof state === 'function'
-          ? produce(original, state)
-          : assign(replace ? {} : original, state)
+        typeof stateOrRecipe === 'function'
+          ? produce(original, stateOrRecipe)
+          : mergeState(replace ? {} : original, stateOrRecipe)
 
       setFn(nextState, true)
     }

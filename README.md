@@ -128,7 +128,7 @@ export const counter = new Counter()
 
 ```ts
 const count$ = store.select(state => state.count)
-count$.subject(val => {
+count$.subscribe(val => {
   console.log(`count is: ${val}`)
 })
 ```
@@ -147,6 +147,12 @@ count$.subject(val => {
 
 ### Immer Plugin
 
+首先你需要安装 [immer](https://github.com/immerjs/immer)
+
+```bash
+npm i immer
+```
+
 ```ts
 import { Store, State } from 'zhuangtai'
 import { immer } from 'zhuangtai/plugins'
@@ -155,7 +161,7 @@ import { immer } from 'zhuangtai/plugins'
 declare module 'zhuangtai' {
   interface Store<S extends State = any> {
     setState(state: Partial<S>, replace?: boolean): void
-    setState(state: (draft: S) => void): void
+    setState(recipe: (draft: S) => void): void
   }
 }
 
@@ -239,7 +245,7 @@ import { pairwise } from 'rxjs/operators'
 function createLogPlugin<T extends Store>() {
   return (store => {
     store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
-      console.info(
+      console.log(
         `${store.constructor.name}:
 prev state: %o
 next state: %o
