@@ -30,10 +30,16 @@ const persistPlugin = persist<Counter>({
 function createLogPlugin<T extends Store>() {
   return (store => {
     store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
-      console.log(`${store.constructor.name}:
+      console.log(
+        `${store.constructor.name}:
 %cprev state: %o
 %cnext state: %o
-      `, 'color: #999', prev, 'color: #22c55e', next)
+      `,
+        'color: #999',
+        prev,
+        'color: #22c55e',
+        next,
+      )
     })
     return {}
   }) as Plugin<T>

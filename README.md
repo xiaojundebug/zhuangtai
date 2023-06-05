@@ -17,8 +17,16 @@
 
 ## 快速上手
 
+### 安装依赖
+
+```bash
+npm i zhuangtai && npm i rxjs
+```
+
+### 简单示例
+
 ```tsx
-// CounterStore.ts
+// counter.store.ts
 import { Store } from 'zhuangtai'
 
 export interface CounterState {
@@ -321,8 +329,8 @@ const { foo, bar } = useStore(store, ['foo', 'bar'], deepEqual)
 
 此项目没有使用 monorepo 进行管理，你可以通过 `npm link` 方式进行本地开发 & 预览
 
-1. 进入项目根目录，执行 `npm link`，代码修改后运行 `npm run build`
-2. 进入 `examples/counter` 文件夹，执行 `npm link zhuangtai`
+1. 进入项目根目录，执行 `npm link`，代码修改后执行 `npm run build`
+2. 进入 `examples/counter` 文件夹，先执行 `npm link zhuangtai`，然后执行 `npm run dev`
 
 </details>
 
@@ -347,5 +355,52 @@ const persistPlugin = persist<Counter>({
 ```
 
 除此之外还有一些其它问题，服务端和客户端渲染时由于状态不一致可能会导致“水合错误”（客户端拿到的是持久化后的状态，但服务端渲染时拿不到），在 `nextjs` 中我们可以通过[动态组件](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading)的方式解决此问题
+
+</details>
+
+<details>
+<summary>怎样配合 react-tracked 使用？</summary>
+
+如果你觉得使用选择器的方式太过繁琐，但是不传入选择器又会产生多余渲染，那么 [react-tracked](https://github.com/dai-shi/react-tracked) 是一个不错的选择，它会跟踪你真正使用的 state，未使用的 state 变动时不会触发组件渲染
+
+首先你需要先安装它
+
+```bash
+npm i react-tracked
+```
+
+在 `zhuangtai` 中使用 `react-tracked` 需要做一些适配操作，参考下方代码
+
+```tsx
+import { State, Store } from 'zhuangtai'
+import { useStore } from 'zhuangtai/react'
+import { createTrackedSelector } from 'react-tracked'
+
+// 你可以把这个函数抽离到公共模块中，该函数时是为了适配 createTrackedSelector
+function createUseSelector<S extends State>(store: Store<S>) {
+  return useStore.bind(null, store as any) as unknown as <V>(selector: (state: S) => V) => V
+}
+
+class MyStore extends Store<{ foo: string; bar: number }> {
+  constructor() {
+    super({ foo: 'abc', bar: 123 })
+  }
+  // ...
+}
+
+const myStore = new MyStore()
+const useMyStore = createTrackedSelector(createUseSelector(myStore))
+
+const App = () => {
+  const state = useMyStore()
+
+  // 这里只使用了 foo，所以 bar 变动时候时不会触发渲染的
+  return (
+    <div>
+      <p>foo: {state.foo}</p>
+    </div>
+  )
+}
+```
 
 </details>

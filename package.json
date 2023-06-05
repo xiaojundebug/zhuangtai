@@ -2,10 +2,10 @@
   "name": "zhuangtai",
   "version": "0.0.1",
   "description": "A react state manager with rxjs.",
+  "scripts": {
+    "build": "tsc && vite build"
+  },
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "types": "./dist/index.d.ts",
   "module": "./dist/zhuangtai.js",
   "exports": {
@@ -22,12 +22,18 @@
       "import": "./dist/react.js"
     }
   },
-  "scripts": {
-    "build": "tsc && vite build"
-  },
-  "keywords": [],
-  "author": "",
+  "author": "imzxj <362896731@qq.com>",
   "license": "MIT",
+  "homepage": "https://imzxj.github.io/zhuangtai",
+  "repository": "git@github.com:imzxj/zhuangtai.git",
+  "keywords": [
+    "rxjs",
+    "react",
+    "state"
+  ],
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "use-sync-external-store": "^1.2.0"
   },

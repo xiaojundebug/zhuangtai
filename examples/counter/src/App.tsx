@@ -1,6 +1,6 @@
 import './App.css'
 import { useStore } from 'zhuangtai/react'
-import { counter } from './stores/counter'
+import { counter } from './stores/counter.store'
 
 function App() {
   const { count } = useStore(counter, s => ({ count: s.count }))
