@@ -6,8 +6,8 @@ export interface StateStorage {
   setItem: (name: string, value: string) => void
   removeItem: (name: string) => void
 }
-export type Serizlizer = (value: any, ...rest: any[]) => string
-export type Deserializer = (text: string, ...rest: any[]) => any
+export type Serizlizer = (...args: any[]) => any
+export type Deserializer = (...args: any[]) => any
 export interface PersistOptions<T extends Store> {
   /**
    * 存到 storage 中的唯一的 key 值
