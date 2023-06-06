@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "A react state manager with rxjs.",
   "scripts": {
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "build": "tsc && vite build"
   },
   "type": "module",
@@ -40,13 +42,17 @@
   "devDependencies": {
     "@types/react": "^16.8",
     "@types/use-sync-external-store": "0.0.3",
+    "@vitest/coverage-c8": "^0.31.4",
+    "@vitest/ui": "^0.31.4",
     "immer": "^9.0",
+    "jsdom": "^22.1.0",
     "prettier": "^2.7.1",
     "react": "^16.8",
     "rxjs": "^7.0",
     "typescript": "^5.0.4",
     "vite": "^4.3.8",
-    "vite-plugin-dts": "^2.3.0"
+    "vite-plugin-dts": "^2.3.0",
+    "vitest": "^0.31.4"
   },
   "peerDependencies": {
     "immer": ">=9.0",

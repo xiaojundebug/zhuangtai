@@ -4,6 +4,13 @@ import pkg from './package.json'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
+  resolve: {
+    alias: [
+      { find: /^zhuangtai$/, replacement: './src/index.ts' },
+      { find: /^zhuangtai\/plugins$/, replacement: './src/plugins.ts' },
+      { find: /^zhuangtai\/react$/, replacement: './src/react.ts' },
+    ],
+  },
   build: {
     lib: {
       entry: {
@@ -25,5 +32,10 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts()]
+  plugins: [dts()],
+  test: {
+    name: pkg.name,
+    environment: 'jsdom',
+    dir: 'tests',
+  }
 })
