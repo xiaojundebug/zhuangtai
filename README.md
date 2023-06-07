@@ -222,25 +222,41 @@ class Counter extends Store<{ count: number }> {
 
 > Type: `(state: S) => Partial<S>`
 
+> Default: `state => state`
+
 只保存需要的字段，默认保存所有
 
 ##### `getStorage`（可选）
 
 > Type: `() => StateStorage`
 
-自定义 storage，默认使用 localStorage
+> Default: `localStorage`
+
+自定义 storage
 
 ##### `serialize`（可选）
 
 > Type: `Serizlizer`
 
-自定义序列化器，默认是 `JSON.stringify`
+> Default: `JSON.stringify`
+
+自定义序列化器
 
 ##### `deserialize`（可选）
 
 > Type: `Deserializer`
 
-自定义反序列化器，默认是 `JSON.parse`
+> Default: `JSON.parse`
+
+自定义反序列化器
+
+##### `version`（可选）
+
+> Type: `number`
+
+> Default: `0`
+
+如果持久化的 state 版本与此处指定的版本不匹配，则跳过状态合并
 
 ### 自定义插件
 
