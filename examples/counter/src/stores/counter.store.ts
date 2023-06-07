@@ -29,7 +29,7 @@ const persistPlugin = persist<Counter>({
 // 自定义插件
 function createLogPlugin<T extends Store>() {
   return (store => {
-    store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
+    store.select().pipe(pairwise()).subscribe(([prev, next]) => {
       console.log(
         `${store.constructor.name}:
 %cprev state: %o

@@ -35,7 +35,7 @@ function useStore<T extends State, U extends keyof T | any = T>(
   const api = useMemo(() => {
     return {
       subscribe: (cb: () => void) => {
-        const sub = store.state$.subscribe(cb)
+        const sub = store.select().subscribe(cb)
         return () => sub.unsubscribe()
       },
       getState: store.getState.bind(store),

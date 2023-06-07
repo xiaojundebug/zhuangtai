@@ -1,6 +1,6 @@
 # zhuangtai
 
-一个用 rxjs 实现的 react 状态管理工具
+一个用 RxJS 实现的 react 状态管理工具
 
 <p>
   <img alt="stars" src="https://img.shields.io/github/stars/imzxj/zhuangtai.svg?color=%2336be52">&nbsp;
@@ -100,19 +100,13 @@ class Counter extends Store<CounterState> {
 export const counter = new Counter()
 ```
 
-### 实例属性
+### Getters
 
 #### `state`
 
 > Type: `S`
 
 一个 getter，等同于 [store.getState()](#getState)
-
-#### `state$`
-
-> Type: `BehaviorSubject<S>`
-
-一个 RxJS BehaviorSubject，它的 value 是 state，熟悉 RxJS 者可以通过它进行一些高级操作
 
 ### 实例方法
 
@@ -130,16 +124,20 @@ export const counter = new Counter()
 
 #### `select`
 
-> Type: `(selector: Selector<S, V>, comparer?: Comparer<V>) => Observable<V>`
+> Type: `(selector?: Selector<S, V> | null, comparer?: Comparer<V>) => Observable<V>`
 
-根据 selector 创建一个 Observable，一般用来监听某些属性的变动
+根据 selector 创建一个 RxJS Observable，一般用来监听某些属性的变动，selector 传空表示监听任意属性变动，
+你还可以通过自定义 `comparer` 来决定 observable 的值是否发出，默认是 `Object.is`
 
 ```ts
+// 监听 count 变动
 const count$ = store.select(state => state.count)
 count$.subscribe(val => {
   console.log(`count is: ${val}`)
 })
 ```
+
+_`select` 方法其实是 RxJS 中 `map` 与 `distinctUntilChanged` 的简写 👉 `observable.pipe(map(selector), distinctUntilChanged(comparer))`_
 
 ### 静态属性
 
@@ -268,16 +266,19 @@ import { pairwise } from 'rxjs/operators'
 
 function createLogPlugin<T extends Store>() {
   return (store => {
-    store.state$.pipe(pairwise()).subscribe(([prev, next]) => {
-      console.log(
-        `${store.constructor.name}:
+    store
+      .select()
+      .pipe(pairwise())
+      .subscribe(([prev, next]) => {
+        console.log(
+          `${store.constructor.name}:
 prev state: %o
 next state: %o
       `,
-        prev,
-        next,
-      )
-    })
+          prev,
+          next,
+        )
+      })
     return {}
   }) as Plugin<T>
 }

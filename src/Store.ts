@@ -15,7 +15,7 @@ export type Plugin<T extends Store = any> = (store: T) => {
 let DEFAULT_PLUGINS: Plugin[] = []
 
 class Store<S extends State = any> {
-  readonly state$ = new BehaviorSubject({} as S)
+  private readonly state$ = new BehaviorSubject({} as S)
   private readonly plugins: ReturnType<Plugin>[] = []
 
   get state() {
@@ -37,8 +37,11 @@ class Store<S extends State = any> {
     }
   }
 
-  select<V>(selector: Selector<S, V>, comparer?: Comparer<V>): Observable<V> {
-    return this.state$.pipe(map(selector), distinctUntilChanged(comparer))
+  select<V>(selector?: Selector<S, V> | null, comparer?: Comparer<V>): Observable<V> {
+    return this.state$.pipe(
+      map(selector || (echo as Selector<S, V>)),
+      distinctUntilChanged(comparer),
+    )
   }
 
   setState(state: Partial<S>, replace = false) {
