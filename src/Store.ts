@@ -37,7 +37,7 @@ class Store<S extends State = any> {
     }
   }
 
-  select<V>(selector?: Selector<S, V> | null, comparer?: Comparer<V>): Observable<V> {
+  select<V = S>(selector?: Selector<S, V> | null, comparer?: Comparer<V>): Observable<V> {
     return this.state$.pipe(
       map(selector || (echo as Selector<S, V>)),
       distinctUntilChanged(comparer),
