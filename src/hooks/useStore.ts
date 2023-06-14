@@ -8,13 +8,16 @@ type StoreWithReact<S extends State> = Store<S> & {
 }
 type ValueType<T extends State, U extends keyof T | any> = U extends keyof T ? Pick<T, U> : U
 
+// prettier-ignore
 function useStore<S extends State>(store: StoreWithReact<S>): S
+// prettier-ignore
 function useStore<S extends State, V>(store: StoreWithReact<S>, selector: Selector<S, V>, comparer?: Comparer<V>): V
+// prettier-ignore
 function useStore<S extends State, K extends keyof S>(store: StoreWithReact<S>, keys: K[], comparer?: Comparer<Pick<S, K>>): Pick<S, K>
 function useStore<T extends State, U extends keyof T | any = T>(
   store: StoreWithReact<T>,
   keysOrSelector?: U extends keyof T ? U[] : Selector<T, U>,
-  comparer?: Comparer<ValueType<T, U>>,
+  comparer?: Comparer<ValueType<T, U>>
 ): ValueType<T, U> {
   const isPickAll = !keysOrSelector
   const isSelector = typeof keysOrSelector === 'function'
@@ -48,7 +51,7 @@ function useStore<T extends State, U extends keyof T | any = T>(
     api.getState,
     api.getServerState,
     selector,
-    equalityFn,
+    equalityFn
   )
 }
 

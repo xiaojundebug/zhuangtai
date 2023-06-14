@@ -86,6 +86,6 @@ test('can custom serializer and deserializer', () => {
   expect(store.state.count).toEqual(9)
   store.setState({ count: 100 })
   expect(dummyStorage.getItem(DUMMY_STATE_KEY)).toEqual(
-    serialize({ version: 0, state: { count: 6 } }),
+    serialize({ version: 0, state: { count: 6 } })
   )
 })

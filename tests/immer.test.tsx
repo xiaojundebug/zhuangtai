@@ -11,7 +11,7 @@ class MyStore extends Store<{ obj: Record<string, any> }> {
           bar: 456,
         },
       },
-      { plugins: [immer()] },
+      { plugins: [immer()] }
     )
   }
 }
@@ -23,7 +23,7 @@ test('no error throw', () => {
     // @ts-ignore
     myStore.setState(draft => {
       draft.obj.foo = 'hello'
-    }),
+    })
   ).not.toThrow()
 })
 

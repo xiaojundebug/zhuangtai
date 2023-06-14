@@ -14,7 +14,7 @@ function immer<T extends Store>() {
 
     store.setState = function setState(
       stateOrRecipe: Partial<T> | ((draft: T) => void),
-      replace = false,
+      replace = false
     ) {
       const original = this.getState()
 

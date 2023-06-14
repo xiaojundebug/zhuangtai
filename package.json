@@ -5,7 +5,8 @@
   "scripts": {
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "prettier": "prettier --write './{src,tests}/**/*.{js,jsx,ts,tsx,json}'"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
