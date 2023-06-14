@@ -4,7 +4,7 @@
   "description": "A react state manager with rxjs.",
   "scripts": {
     "test": "vitest run",
-    "coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "build": "tsc && vite build",
     "prettier": "prettier --write './{src,tests}/**/*.{js,jsx,ts,tsx,json}'"
   },
