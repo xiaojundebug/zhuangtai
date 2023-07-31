@@ -3,8 +3,8 @@
 一个用 RxJS 实现的 react 状态管理工具
 
 <p>
-  <img alt="stars" src="https://img.shields.io/github/stars/imzxj/zhuangtai.svg?color=%2336be52">&nbsp;
-  <img alt="contributors" src="https://img.shields.io/github/contributors/imzxj/zhuangtai.svg?color=%23409eff">
+  <img alt="stars" src="https://img.shields.io/github/stars/xiaojundebug/zhuangtai.svg?color=%2336be52">&nbsp;
+  <img alt="contributors" src="https://img.shields.io/github/contributors/xiaojundebug/zhuangtai.svg?color=%23409eff">
 </p>
 
 ## 特点

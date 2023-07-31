@@ -25,10 +25,10 @@
       "import": "./dist/react.js"
     }
   },
-  "author": "imzxj <362896731@qq.com>",
+  "author": "xiaojundebug <362896731@qq.com>",
   "license": "MIT",
-  "homepage": "https://imzxj.github.io/zhuangtai",
-  "repository": "git@github.com:imzxj/zhuangtai.git",
+  "homepage": "https://xiaojundebug.github.io/zhuangtai",
+  "repository": "git@github.com:xiaojundebug/zhuangtai.git",
   "keywords": [
     "rxjs",
     "react",
