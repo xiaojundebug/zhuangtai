@@ -20,7 +20,7 @@
 ### 安装依赖
 
 ```bash
-npm i zhuangtai && npm i rxjs
+npm i zhuangtai rxjs
 ```
 
 ### 简单示例
