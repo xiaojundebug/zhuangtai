@@ -1,9 +1,10 @@
 {
   "name": "zhuangtai",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A react state manager with rxjs.",
   "scripts": {
     "test": "vitest run",
+    "tsc": "tsc",
     "test:coverage": "vitest run --coverage",
     "build": "tsc && vite build",
     "prettier": "prettier --write './{src,tests}/**/*.{js,jsx,ts,tsx,json}'"
@@ -16,9 +17,17 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/zhuangtai.js"
     },
-    "./plugins": {
-      "types": "./dist/plugins.d.ts",
-      "import": "./dist/plugins.js"
+    "./plugins/immer": {
+      "types": "./dist/plugins/immer.d.ts",
+      "import": "./dist/plugins/immer.js"
+    },
+    "./plugins/persist": {
+      "types": "./dist/plugins/persist.d.ts",
+      "import": "./dist/plugins/persist.js"
+    },
+    "./plugins/history": {
+      "types": "./dist/plugins/history.d.ts",
+      "import": "./dist/plugins/history.js"
     },
     "./react": {
       "types": "./dist/react.d.ts",

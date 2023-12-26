@@ -7,41 +7,29 @@ export type State = Record<string, any>
 export type ExtractState<T extends Store> = T extends { getState: () => infer S } ? S : never
 export type Selector<S extends State, V> = (state: S) => V
 export type Comparer<V> = (previous: V, current: V) => boolean
-export type Plugin<T extends Store = any> = (store: T) => {
-  onInit?: (initialState?: ExtractState<T>) => T
-  afterChange?: (state: ExtractState<T>) => void
+
+export interface Store<S extends State = any> {
+  getState(): S
+  setState(state: Partial<S>, replace?: boolean): void
+  select<V = S>(selector?: Selector<S, V> | null, comparer?: Comparer<V>): Observable<V>
 }
 
-let DEFAULT_PLUGINS: Plugin[] = []
-
-class Store<S extends State = any> {
+export class Store<S extends State = any> {
   private readonly state$ = new BehaviorSubject({} as S)
-  private readonly plugins: ReturnType<Plugin>[] = []
+
+  constructor(initialState?: S) {
+
+    if (initialState) {
+      this.setState(initialState)
+    }
+  }
 
   get state() {
     return this.getState()
   }
 
-  constructor(initialState?: S, options?: { plugins?: Plugin[] }) {
-    const { plugins = [] } = options || {}
-
-    this.plugins = DEFAULT_PLUGINS.concat(plugins).map(plugin => plugin(this))
-
-    const finalInitialState = this.plugins.reduce((result, plugin) => {
-      const { onInit = echo } = plugin
-      return onInit(result)
-    }, initialState)
-
-    if (finalInitialState) {
-      this.setState(finalInitialState)
-    }
-  }
-
-  select<V = S>(selector?: Selector<S, V> | null, comparer?: Comparer<V>): Observable<V> {
-    return this.state$.pipe(
-      map(selector || (echo as Selector<S, V>)),
-      distinctUntilChanged(comparer)
-    )
+  getState() {
+    return this.state$.getValue()
   }
 
   setState(state: Partial<S>, replace = false) {
@@ -54,24 +42,12 @@ class Store<S extends State = any> {
     const nextState = (replace ? state : { ...original, ...state }) as S
 
     this.state$.next(nextState)
-
-    for (const plugin of this.plugins) {
-      const { afterChange } = plugin
-      afterChange?.(nextState)
-    }
   }
 
-  getState(): S {
-    return this.state$.value
-  }
-
-  destroy() {
-    this.state$.complete()
-  }
-
-  static setDefaultPlugins(plugins: Plugin[]) {
-    DEFAULT_PLUGINS = plugins
+  select<V = S>(selector?: Selector<S, V> | null, comparer?: Comparer<V>) {
+    return this.state$.pipe(
+      map(selector || (echo as Selector<S, V>)),
+      distinctUntilChanged(comparer)
+    )
   }
 }
-
-export default Store

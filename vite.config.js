@@ -7,7 +7,9 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^zhuangtai$/, replacement: './src/index.ts' },
-      { find: /^zhuangtai\/plugins$/, replacement: './src/plugins.ts' },
+      { find: /^zhuangtai\/plugins\/immer$/, replacement: './src/plugins/immer.ts' },
+      { find: /^zhuangtai\/plugins\/persist$/, replacement: './src/plugins/persist.ts' },
+      { find: /^zhuangtai\/plugins\/history$/, replacement: './src/plugins/history.ts' },
       { find: /^zhuangtai\/react$/, replacement: './src/react.ts' },
     ],
   },
@@ -15,7 +17,9 @@ export default defineConfig({
     lib: {
       entry: {
         [pkg.name]: resolve(__dirname, 'src/index.ts'),
-        'plugins': resolve(__dirname, 'src/plugins.ts'),
+        'plugins/immer': resolve(__dirname, 'src/plugins/immer.ts'),
+        'plugins/persist': resolve(__dirname, 'src/plugins/persist.ts'),
+        'plugins/history': resolve(__dirname, 'src/plugins/history.ts'),
         'react': resolve(__dirname, 'src/react.ts')
       },
       formats: ['es'],

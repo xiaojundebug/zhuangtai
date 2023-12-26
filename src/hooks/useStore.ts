@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
-import Store, { Comparer, Selector, State } from '../Store'
+import { Comparer, Selector, State, Store } from '../Store'
 import { echo, returnFalse, shallowEqual } from '../utils'
 
 type StoreWithReact<S extends State> = Store<S> & {

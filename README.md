@@ -139,14 +139,6 @@ count$.subscribe(val => {
 
 _`select` 方法其实是 RxJS 中 `map` 与 `distinctUntilChanged` 的简写 👉 `observable.pipe(map(selector), distinctUntilChanged(comparer))`_
 
-### 静态属性
-
-#### `setDefaultPlugins`
-
-> Type: `(plugins: Plugin[]): void`
-
-设置全局默认插件，对所有 Store 生效，插件使用方式参考[此处](#Plugins)
-
 ## Plugins
 
 可以通过插件机制对 Store 进行功能扩展，目前内置了 `immer` 与 `persist` 插件
@@ -161,19 +153,12 @@ npm i immer
 
 ```ts
 import { Store, State } from 'zhuangtai'
-import { immer } from 'zhuangtai/plugins'
-
-// 由于 immer 插件修改了 setState 的传参方式，如果你是 typescript 用户，需要扩展一下类型声明
-declare module 'zhuangtai' {
-  interface Store<S extends State = any> {
-    setState(state: Partial<S>, replace?: boolean): void
-    setState(recipe: (draft: S) => void): void
-  }
-}
+import immer from 'zhuangtai/plugins/immer'
 
 class Counter extends Store<{ count: number }> {
   constructor() {
-    super({ count: 0 }, { plugins: [immer()] })
+    super({ count: 0 })
+    immer(this)
   }
 
   increase() {
@@ -192,17 +177,18 @@ class Counter extends Store<{ count: number }> {
 
 ### Persist Plugin
 
+用于将 state 持久化到本地
+
 ```ts
 import { Store, State } from 'zhuangtai'
-import { persist } from 'zhuangtai/plugins'
-
-const persistator = persist<Counter>({
-  name: 'COUNTER_STATE',
-})
+import persist from 'zhuangtai/plugins/persist'
 
 class Counter extends Store<{ count: number }> {
   constructor() {
-    super({ count: 0 }, { plugins: [persistator] })
+    super({ count: 0 })
+    persist(this, {
+      name: 'COUNTER_STATE',
+    })
   }
   // ...
 }
@@ -256,6 +242,70 @@ class Counter extends Store<{ count: number }> {
 
 如果持久化的 state 版本与此处指定的版本不匹配，则跳过状态合并
 
+### History Plugin
+
+一个方便的插件，用于实现 `undo`、`redo` 功能
+
+```ts
+import { Store, State } from 'zhuangtai'
+import history from 'zhuangtai/plugins/history'
+
+class Counter extends Store<{ count: number }> {
+  constructor() {
+    super({ count: 0 })
+    // ...Other plugins
+    history(this, { limit: 10 })
+  }
+  // ...
+}
+```
+
+如果你需要使用多个插件，你应该确保最后再应用 `history` 插件
+
+#### Options
+
+##### `limit`（可选）
+
+> Type: `number`
+
+最大保存历史数量限制
+
+> Type: `number`
+
+> Default: `Infinite`
+
+#### APIs
+
+##### `store.history.undo`
+
+> Type: `() => boolean`
+
+状态撤销，不能的话 return `false`
+
+##### `store.history.redo`
+
+> Type: `() => boolean`
+
+状态重做，不能的话 return `false`
+
+##### `store.history.go`
+
+> Type: `(step: number) => boolean`
+
+`step` 为负数代表撤销次数，为正数代表重做次数，如果传入一个超出历史记录范围的数字，则取开头或者末尾的那条记录，传 `0` 会 return `false`
+
+##### `store.history.getPast()`
+
+> Type: `() => S[]`
+
+获取可以撤销的历史记录
+
+##### `store.history.getFuture()`
+
+> Type: `() => S[]`
+
+获取可以重做的历史记录，如果你设置了一个新的 state，该记录会被清空
+
 ### 自定义插件
 
 你也可以根据业务需求开发自己的插件，让我们以 log 插件为例
@@ -264,28 +314,28 @@ class Counter extends Store<{ count: number }> {
 import { Store, Plugin } from 'zhuangtai'
 import { pairwise } from 'rxjs/operators'
 
-function createLogPlugin<T extends Store>() {
-  return (store => {
-    store
-      .select()
-      .pipe(pairwise())
-      .subscribe(([prev, next]) => {
-        console.log(
-          `${store.constructor.name}:
-prev state: %o
-next state: %o
+function logger(store: Store, scope: string) {
+  store
+    .select()
+    .pipe(pairwise())
+    .subscribe(([prev, next]) => {
+      console.log(
+        `${scope}:
+%cprev state: %o
+%cnext state: %o
       `,
-          prev,
-          next,
-        )
-      })
-    return {}
-  }) as Plugin<T>
+        'color: #999',
+        prev,
+        'color: #22c55e',
+        next
+      )
+    })
 }
 
 class Counter extends Store<{ count: number }> {
   constructor() {
-    super({ count: 0 }, { plugins: [createLogPlugin()] })
+    super({ count: 0 })
+    logger(this, 'Counter')
   }
   // ...
 }
@@ -339,7 +389,16 @@ function deepEqual(a, b) {
 const { foo, bar } = useStore(store, ['foo', 'bar'], deepEqual)
 ```
 
-## 常见问题
+## FAQ
+
+<details>
+<summary>为什么选择用 class 作为 Store 而不是函数风格？</summary>
+
+- 个人感觉 OOP 风格代码更容易维护
+- 业务都写在函数中我感觉很乱，而且会有暂时性死区问题而 class 没有这种困扰
+- 我可以忽略 this 带来的困扰
+
+</details>
 
 <details>
 <summary>怎样在本地运行此项目？</summary>

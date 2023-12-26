@@ -1,4 +1,4 @@
-import Store, { ExtractState, Plugin } from '../Store'
+import { State, Store } from '../Store'
 import { echo } from '../utils'
 
 export interface StateStorage {
@@ -12,7 +12,7 @@ export type StorageValue<S> = {
   state: S
   version?: number
 }
-export interface PersistOptions<T extends Store> {
+export interface PersistOptions<S extends State> {
   /**
    * 存到 storage 中的唯一的 key 值
    */
@@ -20,7 +20,7 @@ export interface PersistOptions<T extends Store> {
   /**
    * 只保存需要的字段
    */
-  partialize?: (state: ExtractState<T>) => Partial<ExtractState<T>>
+  partialize?: (state: S) => Partial<S>
   /**
    * 自定义 storage，默认使用 localStorage
    */
@@ -44,9 +44,9 @@ function resolveStorage(storage?: StateStorage) {
 }
 
 /**
- * state persist plugin
+ * State Persistence Plugin
  */
-function persist<T extends Store>(options: PersistOptions<T>) {
+function persist<S extends State>(store: Store<S>, options: PersistOptions<S>) {
   const {
     name,
     partialize = echo,
@@ -55,28 +55,21 @@ function persist<T extends Store>(options: PersistOptions<T>) {
     version = 0,
   } = options
 
-  return (_ => ({
-    onInit(initialState) {
-      const storage = resolveStorage(options.getStorage?.())
-      const serializedValue = storage.getItem(name)
+  const currentState = store.getState()
+  const storage = resolveStorage(options.getStorage?.())
+  const serializedValue = storage.getItem(name)
 
-      if (!serializedValue) {
-        return initialState
-      }
+  if (serializedValue) {
+    const deserializedStorageValue = deserialize(serializedValue) as StorageValue<S>
+    if (deserializedStorageValue.version === version) {
+      store.setState({ ...currentState, ...deserializedStorageValue.state })
+    }
+  }
 
-      const deserializedStorageValue = deserialize(serializedValue) as StorageValue<ExtractState<T>>
-
-      if (deserializedStorageValue.version !== version) {
-        return initialState
-      }
-
-      return { ...initialState, ...deserializedStorageValue.state }
-    },
-    afterChange(state) {
-      const storage = resolveStorage(options.getStorage?.())
-      storage.setItem(name, serialize({ state: partialize(state), version }))
-    },
-  })) as Plugin<T>
+  store.select().subscribe(state => {
+    const storage = resolveStorage(options.getStorage?.())
+    storage.setItem(name, serialize({ state: partialize(state), version }))
+  })
 }
 
 export default persist
