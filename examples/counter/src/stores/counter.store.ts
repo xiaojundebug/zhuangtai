@@ -1,7 +1,6 @@
 import { Store } from 'zhuangtai'
 import immer from 'zhuangtai/plugins/immer'
 import persist from 'zhuangtai/plugins/persist'
-import history from 'zhuangtai/plugins/history'
 import { sleep } from '../utils'
 import { pairwise } from 'rxjs/operators'
 
@@ -46,10 +45,7 @@ class Counter extends Store<CounterState> {
       // 你可以使用该字段自定义反序列化器
       deserialize: JSON.parse,
     })
-    history(this)
     logger(this, 'Counter')
-
-    window.counter = this
   }
 
   increase() {
