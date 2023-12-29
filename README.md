@@ -1,6 +1,6 @@
 # zhuangtai
 
-一个用 RxJS 实现的状态管理工具，暂且支持 React
+一个固执己见的状态管理工具，基于 RxJS，暂只支持 React
 
 <p>
   <img alt="stars" src="https://img.shields.io/github/stars/xiaojundebug/zhuangtai.svg?color=%2336be52">&nbsp;
@@ -10,10 +10,11 @@
 ## 特点
 
 - 简单易用，TypeScript 类型声明完善，没有啰嗦的样板代码
-- 状态原子化，没有重复的渲染
-- 兼容 React 18 并发模式
+- 内置多个常用的功能插件，采用不可变状态模型，状态可追溯
 - 数据处理逻辑（Store）可以和 React 组件完全分离，便于移植
 - 基于 RxJS，便于有能力者扩展使用
+- React 状态原子化，没有重复的渲染
+- 兼容 React 18 并发模式
 
 ## 快速上手
 
@@ -61,8 +62,8 @@ function App() {
     <div className="App">
       <p>count is: {count}</p>
       <div className="actions">
-        <button onClick={() => counter.increase()}>increate</button>
-        <button onClick={() => counter.decrease()}>decreate</button>
+        <button onClick={() => counter.increase()}>increase</button>
+        <button onClick={() => counter.decrease()}>decrease</button>
       </div>
     </div>
   )

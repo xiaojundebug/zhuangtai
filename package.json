@@ -39,10 +39,10 @@
   "homepage": "https://xiaojundebug.github.io/zhuangtai",
   "repository": "git@github.com:xiaojundebug/zhuangtai.git",
   "keywords": [
-    "rxjs",
     "react",
     "store",
-    "state"
+    "state",
+    "rxjs"
   ],
   "files": [
     "dist"

@@ -11,10 +11,10 @@ function App() {
     <div className="App">
       <p>count is: {count}</p>
       <div className="actions">
-        <button onClick={() => counter.increase()}>increate</button>
-        <button onClick={() => counter.decrease()}>decreate</button>
-        <button onClick={() => counter.increaseAsync()}>increate (async)</button>
-        <button onClick={() => counter.decreaseAsync()}>decreate (async)</button>
+        <button onClick={() => counter.increase()}>increase</button>
+        <button onClick={() => counter.decrease()}>decrease</button>
+        <button onClick={() => counter.increaseAsync()}>increase (async)</button>
+        <button onClick={() => counter.decreaseAsync()}>decrease (async)</button>
         <button onClick={() => counter.reset()}>reset</button>
       </div>
     </div>

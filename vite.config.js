@@ -7,9 +7,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^zhuangtai$/, replacement: './src/index.ts' },
-      { find: /^zhuangtai\/plugins\/immer$/, replacement: './src/plugins/immer.ts' },
-      { find: /^zhuangtai\/plugins\/persist$/, replacement: './src/plugins/persist.ts' },
-      { find: /^zhuangtai\/plugins\/history$/, replacement: './src/plugins/history.ts' },
+      { find: /^zhuangtai\/plugins\/(.*)$/, replacement: './src/plugins/$1.ts' },
       { find: /^zhuangtai\/react$/, replacement: './src/react.ts' },
     ],
   },
@@ -26,14 +24,6 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['react', 'rxjs', 'rxjs/operators', 'immer'],
-      output: {
-        globals: {
-          'react': 'React',
-          'rxjs': 'rxjs',
-          'rxjs/operators': 'rxjs.operators',
-          'immer': 'immer',
-        },
-      },
     },
   },
   plugins: [dts()],

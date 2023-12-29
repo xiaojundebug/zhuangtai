@@ -22,21 +22,21 @@ function logger(store: Store, scope: string) {
       )
     })
 }
+
 export interface CounterState {
   count: number
-  foo: string
-  bar: string
 }
 
 class Counter extends Store<CounterState> {
   constructor() {
     // initial state
-    super({ count: 0, foo: 'foo', bar: 'bar' })
+    super({ count: 0 })
 
     // 在调用业务代码之前应用插件
     immer(this)
     persist(this, {
       name: 'COUNTER_STATE',
+      // 只持久化指定的字段
       partialize: state => ({ count: state.count }),
       // 默认是 localStorage
       getStorage: () => sessionStorage,
