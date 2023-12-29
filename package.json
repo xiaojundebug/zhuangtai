@@ -34,6 +34,9 @@
       "import": "./dist/react.js"
     }
   },
+  "engines": {
+    "node": ">=16"
+  },
   "author": "xiaojundebug <362896731@qq.com>",
   "license": "MIT",
   "homepage": "https://xiaojundebug.github.io/zhuangtai",
