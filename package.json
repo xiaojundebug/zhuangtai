@@ -72,5 +72,13 @@
     "immer": ">=9.0",
     "react": ">=16.8",
     "rxjs": ">=7.0"
+  },
+  "peerDependenciesMeta": {
+    "immer": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
   }
 }
